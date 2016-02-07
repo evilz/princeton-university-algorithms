@@ -21,8 +21,8 @@ public class PercolationStats {
             Percolation p = new Percolation(N);
 
             while (!p.percolates()) {
-                int toOpenX =  StdRandom.uniform(N+1);
-                int toOpenY =  StdRandom.uniform(N+1);
+                int toOpenX =  StdRandom.uniform(N) + 1;
+                int toOpenY =  StdRandom.uniform(N) + 1;
                 if (!p.isOpen(toOpenY, toOpenX)) {
                     p.open(toOpenY, toOpenX);
                     percolationValues[i]++;
@@ -49,9 +49,11 @@ public class PercolationStats {
     }
 
     public static void main(String[] args) {
-        int N = Integer.parseInt(args[0]);
-        int T = Integer.parseInt(args[1]);
+        //int N = Integer.parseInt(args[0]);
+        //int T = Integer.parseInt(args[1]);
 
+        int N = 200;
+        int T = 100;
         PercolationStats stats = new PercolationStats(N, T);
 
         System.out.println("mean\t\t\t= " + stats.mean());

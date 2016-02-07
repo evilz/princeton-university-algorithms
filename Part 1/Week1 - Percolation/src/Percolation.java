@@ -4,7 +4,6 @@ public class Percolation {
 
     private  WeightedQuickUnionUF uf;
     private int virtualTop;
-    private int virtualBottom;
     private int size;
     private boolean[] nodeState;
 
@@ -13,16 +12,15 @@ public class Percolation {
         if (N <= 0)  { throw new java.lang.IllegalArgumentException(); }
 
         size = N;
-        uf = new  WeightedQuickUnionUF(N * N + 2);
+        uf = new  WeightedQuickUnionUF(N * N + 1);
 
         nodeState = new boolean[N * N];
 
         virtualTop = N * N;
-        virtualBottom = N * N + 1;
     }
 
     private void checkIndex(int i, int j) {
-        if (i <= 0 || j <= 0) {
+        if (i <= 0 || i > size || j <= 0 || j > size) {
             throw new java.lang.IndexOutOfBoundsException();
         }
     }
@@ -38,26 +36,19 @@ public class Percolation {
         // top
         if (y > 0 &&  isOpen(i-1, j)) { uf.union(current, current - size); }
         // bottom
-        if (y <= size && isOpen(i+1, j)) { uf.union(current, current + size); }
+        if (i < size && isOpen(i+1, j)) { uf.union(current, current + size); }
         // left
         if (x > 0 && isOpen(i, j-1)) { uf.union(current, current - 1); }
         // right
-        if (x <= size && isOpen(i, j+1)) { uf.union(current, current + 1); }
-
+        if (j < size && isOpen(i, j+1)) { uf.union(current, current + 1); }
         // virtualTop
-        if (y == 0) {
-            uf.union(current, virtualTop);
-        }
-
-        // virtualBottom
-        if (y == size - 1) {
-            uf.union(current, virtualBottom);
-        }
+        if (i == 1) { uf.union(current, virtualTop); }
     }
 
     public boolean isOpen(int i, int j)  {
         checkIndex(i, j);
-       --i;
+
+        --i;
         --j;
         if (i < 0 || i >= size || j < 0 || j >= size) return false;
         int current = i * size + j;
@@ -77,7 +68,12 @@ public class Percolation {
     }
 
     public boolean percolates()      {
-        return uf.connected(virtualTop, virtualBottom);
+
+        for (int x = 1; x <= size; x++) {
+            if (isOpen(size, size - x+1) && uf.connected(virtualTop, virtualTop - x))
+                return true;
+        }
+        return false;
     }
 
     public static void main(String[] args) {
