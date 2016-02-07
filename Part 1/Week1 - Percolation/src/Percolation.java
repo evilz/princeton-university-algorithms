@@ -2,21 +2,27 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
 
-    private  WeightedQuickUnionUF uf;
+    private WeightedQuickUnionUF ufFull;
+    private WeightedQuickUnionUF ufPercolate;
     private int virtualTop;
+    private int virtualBottom;
     private int size;
     private boolean[] nodeState;
 
-    public Percolation(int N)    {
+    public Percolation(int N) {
 
-        if (N <= 0)  { throw new java.lang.IllegalArgumentException(); }
+        if (N <= 0) {
+            throw new java.lang.IllegalArgumentException();
+        }
 
         size = N;
-        uf = new  WeightedQuickUnionUF(N * N + 1);
+        ufFull = new WeightedQuickUnionUF(N * N + 1);
+        ufPercolate = new WeightedQuickUnionUF(N * N + 2);
 
         nodeState = new boolean[N * N];
 
         virtualTop = N * N;
+        virtualBottom = N * N + 1;
     }
 
     private void checkIndex(int i, int j) {
@@ -25,55 +31,64 @@ public class Percolation {
         }
     }
 
-    public void open(int i, int j)       {
+    private int getIndex(int i, int j) {
+        return --i * size + --j;
+    }
+
+    private void union(int p, int q) {
+        ufFull.union(p, q);
+        ufPercolate.union(p, q);
+    }
+
+    public void open(int i, int j) {
         checkIndex(i, j);
 
         int y = i - 1;
         int x = j - 1;
-        int current = y * size + x;
+        int current = getIndex(i, j);
         nodeState[current] = true;
 
         // top
-        if (y > 0 &&  isOpen(i-1, j)) { uf.union(current, current - size); }
+        if (y > 0 && isOpen(i - 1, j)) {
+            union(current, current - size);
+        }
         // bottom
-        if (i < size && isOpen(i+1, j)) { uf.union(current, current + size); }
+        if (i < size && isOpen(i + 1, j)) {
+            union(current, current + size);
+        }
         // left
-        if (x > 0 && isOpen(i, j-1)) { uf.union(current, current - 1); }
+        if (x > 0 && isOpen(i, j - 1)) {
+            union(current, current - 1);
+        }
         // right
-        if (j < size && isOpen(i, j+1)) { uf.union(current, current + 1); }
+        if (j < size && isOpen(i, j + 1)) {
+            union(current, current + 1);
+        }
+
         // virtualTop
-        if (i == 1) { uf.union(current, virtualTop); }
+        if (i == 1) {
+            ufFull.union(current, virtualTop);
+            ufPercolate.union(current, virtualTop);
+        }
+
+        // virtualBottom
+        if (i == size) {
+            ufPercolate.union(current, virtualBottom);
+        }
     }
 
-    public boolean isOpen(int i, int j)  {
+    public boolean isOpen(int i, int j) {
         checkIndex(i, j);
-
-        --i;
-        --j;
-        if (i < 0 || i >= size || j < 0 || j >= size) return false;
-        int current = i * size + j;
-
-        return nodeState[current];
+        return nodeState[getIndex(i, j)];
     }
 
     public boolean isFull(int i, int j) {
         checkIndex(i, j);
-        if (!isOpen(i, j)) { return false; }
-
-        --i;
-        --j;
-        int current = i * size + j;
-
-        return uf.connected(current, virtualTop);
+        return isOpen(i, j) && ufFull.connected(getIndex(i, j), virtualTop);
     }
 
-    public boolean percolates()      {
-
-        for (int x = 1; x <= size; x++) {
-            if (isOpen(size, size - x+1) && uf.connected(virtualTop, virtualTop - x))
-                return true;
-        }
-        return false;
+    public boolean percolates() {
+        return ufPercolate.connected(virtualTop, virtualBottom);
     }
 
     public static void main(String[] args) {

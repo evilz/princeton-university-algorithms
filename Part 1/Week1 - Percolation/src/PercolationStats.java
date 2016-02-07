@@ -6,7 +6,7 @@ import edu.princeton.cs.algs4.StdStats;
  */
 public class PercolationStats {
 
-    private int[] percolationValues;
+    private double[] percolationValues;
     private int t;
 
     public PercolationStats(int N, int T) {
@@ -15,7 +15,7 @@ public class PercolationStats {
 
         t = T;
 
-        percolationValues = new int[T];
+        percolationValues = new double[T];
         for (int i = 0; i < T; i++) {
 
             Percolation p = new Percolation(N);
@@ -28,6 +28,7 @@ public class PercolationStats {
                     percolationValues[i]++;
                 }
             }
+            percolationValues[i] = percolationValues[i] / (N * N);
         }
     }
 
