@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Percolation.iml" filepath="$PROJECT_DIR$/Percolation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Week2 - Randomized Queues and Deques/Week2 - Randomized Queues and Deques.iml" filepath="$PROJECT_DIR$/Week2 - Randomized Queues and Deques/Week2 - Randomized Queues and Deques.iml" />
     </modules>
   </component>
 </project>
