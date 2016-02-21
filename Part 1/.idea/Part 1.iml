@@ -5,6 +5,7 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/Week1 - Percolation/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Week2 - Randomized Queues and Deques/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Week 3 - Pattern Recognition/src" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
