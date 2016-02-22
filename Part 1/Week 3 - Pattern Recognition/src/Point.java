@@ -1,14 +1,14 @@
 /******************************************************************************
- *  Compilation:  javac Point.java
- *  Execution:    java Point
- *  Dependencies: none
- *
- *  An immutable data type for points in the plane.
- *  For use on Coursera, Algorithms Part I programming assignment.
- *
+ * Compilation:  javac Point.java
+ * Execution:    java Point
+ * Dependencies: none
+ * <p>
+ * An immutable data type for points in the plane.
+ * For use on Coursera, Algorithms Part I programming assignment.
  ******************************************************************************/
 
 import java.util.Comparator;
+
 import edu.princeton.cs.algs4.StdDraw;
 
 public class Point implements Comparable<Point> {
@@ -68,9 +68,15 @@ public class Point implements Comparable<Point> {
     public double slopeTo(Point that) {
         //(y1 − y0) / (x1 − x0).
 
-        if (x == that.x && y == that.y)  { return Double.NEGATIVE_INFINITY; }
-        if (y == that.y)                 { return 0.0; }
-        if (x == that.x)                 { return Double.POSITIVE_INFINITY; }
+        if (x == that.x && y == that.y) {
+            return Double.NEGATIVE_INFINITY;
+        }
+        if (y == that.y) {
+            return 0.0;
+        }
+        if (x == that.x) {
+            return Double.POSITIVE_INFINITY;
+        }
         return (that.y - y) / (double) (that.x - x);
     }
 
@@ -87,8 +93,12 @@ public class Point implements Comparable<Point> {
      *         argument point
      */
     public int compareTo(Point that) {
-        if (y == that.y && x == that.x) { return 0; }
-        if (y < that.y || (y == that.y && x < that.x)) { return -1; }
+        if (y == that.y && x == that.x) {
+            return 0;
+        }
+        if (y < that.y || (y == that.y && x < that.x)) {
+            return -1;
+        }
         return 1;
     }
 
@@ -100,12 +110,19 @@ public class Point implements Comparable<Point> {
      */
     public Comparator<Point> slopeOrder() {
 
+        Point invoker = this;
         return new Comparator<Point>() {
             @Override
             public int compare(Point p1, Point p2) {
-                double slope = p1.slopeTo(p2);
-                if (slope < 0) { return -1; }
-                if (slope > 0) { return 1; }
+                double slope1 = invoker.slopeTo(p1);
+                double slope2 = invoker.slopeTo(p2);
+
+                if (slope1 < slope2) {
+                    return -1;
+                }
+                if (slope1 > slope2) {
+                    return 1;
+                }
                 return 0;
             }
         };

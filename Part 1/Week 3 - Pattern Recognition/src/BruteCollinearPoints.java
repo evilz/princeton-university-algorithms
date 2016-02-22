@@ -3,6 +3,7 @@ import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Vincent on 21/02/2016.
@@ -17,16 +18,18 @@ public class BruteCollinearPoints {
             throw new NullPointerException();
         }
 
-        for (int p = 0; p < points.length; p++) {
+        for (int p = 0; p < points.length - 3; p++) {
             Point pointP = points[p];
 
-            for (int q = p + 1; q < points.length; q++) {
-                Point pointQ = points[p];
-                for (int r = q + 1; q < points.length; r++) {
-                    Point pointR = points[p];
-                    for (int s = r + 1; s < points.length; s++) {
-                        Point pointS = points[p];
+            for (int q = p + 1; q < points.length - 2; q++) {
+                Point pointQ = points[q];
 
+                for (int r = q + 1; r < points.length - 1; r++) {
+                    Point pointR = points[r];
+
+                    for (int s = r + 1; s < points.length; s++) {
+
+                        Point pointS = points[s];
                         if (pointP == null) {
                             throw new NullPointerException();
                         }
@@ -48,7 +51,18 @@ public class BruteCollinearPoints {
                         double slopePR = pointP.slopeTo(pointR);
                         double slopePS = pointP.slopeTo(pointS);
                         if (slopePQ == slopePR && slopePQ == slopePS) {
-                            lineSegments.add(new LineSegment(pointP, pointS));
+
+                            Point[] pointInLine = new Point[4];
+                            pointInLine[0] = pointP;
+                            pointInLine[1] = pointQ;
+                            pointInLine[2] = pointR;
+                            pointInLine[3] = pointS;
+                            Arrays.sort(pointInLine);
+
+                            for (int i = 0; i < pointInLine.length - 1; i++) {
+                                lineSegments.add(new LineSegment(pointInLine[i], pointInLine[i+1]));
+                            }
+
                         }
                     }
                 }
@@ -69,7 +83,7 @@ public class BruteCollinearPoints {
 
     public static void main(String[] args) {
 
-        args = new
+        args = new String[]{"C:\\Users\\Vincent\\Documents\\GITHUB\\princeton-university-algorithms\\Part 1\\Week 3 - Pattern Recognition\\src\\input8.txt"};
         // read the N points from a file
         In in = new In(args[0]);
         int N = in.readInt();

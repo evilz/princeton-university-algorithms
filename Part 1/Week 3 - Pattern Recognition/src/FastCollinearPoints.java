@@ -6,12 +6,10 @@ import java.util.Arrays;
  */
 public class FastCollinearPoints {
 
-    private Point[] points;
     private ArrayList<LineSegment> lineSegments = new ArrayList<>();
 
     // finds all line segments containing 4 or more points
     public FastCollinearPoints(Point[] points) {
-        this.points = points;
         if (points == null) {
             throw new NullPointerException();
         }
@@ -33,6 +31,7 @@ public class FastCollinearPoints {
 
     // the line segments
     public LineSegment[] segments() {
-        return (LineSegment[]) lineSegments.toArray();
+        LineSegment[] array = lineSegments.toArray(new LineSegment[lineSegments.size()]);
+        return array;
     }
 }
